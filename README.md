@@ -8,7 +8,7 @@ After 20+ years with MySQL, I started using Postgres again. After some fantastic
 
 **It took me over 30 minutes to learn that Postgres passwords don't allow the `#` character.**
 
-My password generator had helpfully included one.
+My password generator had not so helpfully included one.
 
 This is a solved problem that shouldn't exist. In 2017, Branden Williams drafted an [IETF RFC for Open Password Automation Recipe (OPAR)](https://datatracker.ietf.org/doc/html/draft-bwilliams-kitten-opar-00) to create an open standard for password format requirements. Until that's universally adopted, we need passwords that don't break things.
 
@@ -26,7 +26,7 @@ Characters that cause problems across systems:
 | `` ` `` | command substitution | - | - | - |
 | `$` | variable expansion | - | - | - |
 | `\` | escape | encoding | escape | escape |
-| `!` | history expansion | - | - | - |
+| `!` | history expansion | - | - | - |d
 | `&` | background process | param separator | - | - |
 | `%` | - | escape char | - | - |
 | `;` | command separator | - | statement end | - |
@@ -58,13 +58,13 @@ Kp4x.Tm9n-Bc2w_Qf7v    ← double-click selects ONE segment (bad!)
 Kp4x_Tm9n_Bc2w_Qf7v    ← double-click selects WHOLE thing (good!)
 ```
 
-### 3. The Underscore Insight
+### 3. The Underscore
 
 The underscore `_` is special. It's **both**:
 - A "special character" (satisfies "must contain symbol" website requirements)
 - A "word character" (doesn't break double-click selection)
 
-This is the key insight that drives the default format.
+Thus our default format.
 
 ### 4. Human-Readable Segments
 
@@ -207,7 +207,7 @@ profiles:
 
 ## Why Not Just Use...
 
-**1Password / Bitwarden / etc.?**
+**1Password / LastPass / Bitwarden / etc.?**
 
 They're great! But they generate passwords like `x#7$Kp@9!mQ` that:
 - Break when pasted into shell commands
@@ -226,6 +226,8 @@ No control over format, no segments, easy to get wrong.
 **This tool?**
 
 Generates passwords that are safe by default, readable, and work everywhere.
+
+Wrote with Claude Code, which took about as long as it took to write [this tweet](https://x.com/RealGeneKim/status/2009399795996348576) where I complained about the Postgres password problem.
 
 ## References
 
