@@ -10,7 +10,8 @@ help:
 	@echo "  make test-verbose  Run tests with verbose output"
 	@echo "  make test-safety   Run only P0 safety tests"
 	@echo "  make coverage      Run tests with coverage report"
-	@echo "  make install       Install dependencies"
+	@echo "  make install       Install to ~/bin"
+	@echo "  make install-dev   Install test dependencies (pytest)"
 	@echo "  make clean         Remove build artifacts"
 	@echo "  make run           Generate a password"
 	@echo "  make demo          Show all password modes"
@@ -36,8 +37,16 @@ coverage:
 	python -m pytest tests/ --cov=genpassword --cov-report=term-missing --cov-report=html
 	@echo "Coverage report: htmlcov/index.html"
 
-# Install dependencies
+# Install to ~/bin
 install:
+	mkdir -p ~/bin
+	cp genpassword.py ~/bin/genpassword
+	chmod +x ~/bin/genpassword
+	@echo "Installed to ~/bin/genpassword"
+	@echo "Make sure ~/bin is in your PATH"
+
+# Install test dependencies
+install-dev:
 	pip install pytest pytest-cov
 
 # Clean build artifacts
