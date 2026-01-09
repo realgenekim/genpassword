@@ -26,7 +26,7 @@ Characters that cause problems across systems:
 | `` ` `` | command substitution | - | - | - |
 | `$` | variable expansion | - | - | - |
 | `\` | escape | encoding | escape | escape |
-| `!` | history expansion | - | - | - |d
+| `!` | history expansion | - | - | - |
 | `&` | background process | param separator | - | - |
 | `%` | - | escape char | - | - |
 | `;` | command separator | - | statement end | - |
@@ -155,54 +155,14 @@ $ genpassword --list
 
 ```bash
 # Clone the repo
-git clone https://github.com/yourname/genpassword.git
+git clone https://github.com/realgenekim/genpassword.git
 cd genpassword
 
-# Run directly
+# Install to ~/bin
+make install
+
+# Or run directly
 python genpassword.py
-
-# Or install to PATH
-chmod +x genpassword.py
-ln -s $(pwd)/genpassword.py /usr/local/bin/genpassword
-```
-
-## Configuration
-
-Create `~/.config/genpassword/config.yaml`:
-
-```yaml
-# Default profile to use
-default_profile: default
-
-# Custom profiles
-profiles:
-  default:
-    format: segmented
-    segments: 4
-    segment_length: 4
-    separator: "_"
-    include_uppercase: true
-    include_lowercase: true
-    include_digits: true
-
-  simple:
-    format: segmented
-    segments: 4
-    segment_length: 4
-    separator: "_"
-    include_uppercase: false
-    include_lowercase: true
-    include_digits: true
-    exclude_ambiguous: true  # no 0, O, l, 1, I
-
-  paranoid:
-    format: segmented
-    segments: 4
-    segment_length: 4
-    separators: "._-!^"  # rotate through these
-    include_uppercase: true
-    include_lowercase: true
-    include_digits: true
 ```
 
 ## Why Not Just Use...
