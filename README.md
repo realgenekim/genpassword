@@ -207,14 +207,6 @@ They're great! But they generate passwords like `x#7$Kp@9!mQ` that:
 - Break in URLs
 - Are hard to read and verify
 
-**Random bash one-liners?**
-
-```bash
-< /dev/urandom tr -dc 'A-Za-z0-9' | head -c 16
-```
-
-No control over format, no segments, easy to get wrong.
-
 **This tool?**
 
 Generates passwords that are safe by default, readable, and work everywhere.
