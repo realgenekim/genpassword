@@ -96,12 +96,17 @@ The default format satisfies all of these.
 
 ### How much do you need?
 
-| Bits | Protection Level |
-|------|------------------|
-| 64 | Online attacks with rate limiting |
-| 80 | Offline attacks, commodity hardware |
-| **80-100** | **Recommended for password managers** |
-| 128 | Nation-state attackers (overkill for passwords) |
+| Bits | Time to crack (1B guesses/sec) | Protection Level |
+|------|-------------------------------|------------------|
+| 64 | ~585 years | Online attacks (with rate limiting) |
+| 80 | ~38 million years | Offline attacks, commodity hardware |
+| **93** | **~315 billion years** | **Our default** |
+| 112 | ~1.6 × 10^17 years | NIST minimum for cryptographic keys |
+| 128 | ~1 × 10^22 years | Quantum-resistant |
+
+*Note: Age of universe ≈ 1.4 × 10^10 years*
+
+[NIST SP 800-63B](https://pages.nist.gov/800-63-3/sp800-63b.html) requires rate-limiting below 64 bits, and specifies 112 bits minimum for cryptographic operations.
 
 ### Comparison
 
@@ -112,7 +117,7 @@ The default format satisfies all of these.
 | 1Password (20 chars) | ~130 bits |
 | Random 16 alphanumeric | ~95 bits |
 
-Our ~93 bits is solid. You'd need mass-scale computing (or waiting until the heat death of the universe) to brute-force it.
+Our ~93 bits is solid—22× the age of the universe to brute-force at 1 billion guesses/second.
 
 ## Modes
 
