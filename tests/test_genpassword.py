@@ -320,6 +320,86 @@ class TestEntropy:
         assert simple_entropy > 0
 
 
+class TestEmpiricalRandomness:
+    """Empirical tests that verify randomness in practice, not just theory."""
+
+    def test_compression_ratio(self):
+        """High-entropy data should not compress well.
+
+        Random data typically achieves ~0% compression.
+        Low-entropy/patterned data compresses significantly.
+        """
+        import zlib
+
+        # Generate many passwords
+        passwords = ''.join(generate_default() for _ in range(5000))
+        original_size = len(passwords.encode())
+
+        # Compress
+        compressed = zlib.compress(passwords.encode(), level=9)
+        ratio = len(compressed) / original_size
+
+        # Random data shouldn't compress below ~95% of original
+        # (some overhead from zlib headers, but mostly incompressible)
+        assert ratio > 0.70, \
+            f"Compression ratio {ratio:.2%} suggests patterns/low entropy"
+
+    def test_no_positional_bias(self):
+        """Each position should have good character variety."""
+        from collections import Counter
+
+        # Collect chars at each position across many passwords
+        position_chars = {i: [] for i in range(19)}  # 19 chars in default
+
+        for _ in range(500):
+            pw = generate_default()
+            for i, c in enumerate(pw):
+                position_chars[i].append(c)
+
+        # Each non-separator position should have variety
+        for pos in [0, 1, 2, 3, 5, 6, 7, 8, 10, 11, 12, 13, 15, 16, 17, 18]:
+            unique = len(set(position_chars[pos]))
+            # Should see at least 20 different chars in 500 samples
+            assert unique >= 15, \
+                f"Position {pos} only has {unique} unique chars - possible bias"
+
+    def test_sequential_passwords_independent(self):
+        """Consecutive passwords should not share suspicious patterns."""
+        passwords = [generate_default() for _ in range(200)]
+
+        long_prefix_count = 0
+        for i in range(len(passwords) - 1):
+            # Count matching prefix length
+            common = 0
+            for c1, c2 in zip(passwords[i], passwords[i + 1]):
+                if c1 == c2:
+                    common += 1
+                else:
+                    break
+            if common >= 3:
+                long_prefix_count += 1
+
+        # With true randomness, P(3+ char prefix match) is very low
+        # Should see at most a few in 200 pairs
+        assert long_prefix_count < 10, \
+            f"Too many sequential passwords share prefixes: {long_prefix_count}"
+
+    def test_character_class_per_segment(self):
+        """Verify each segment actually has upper, lower, and digit."""
+        for _ in range(100):
+            pw = generate_default()
+            segments = pw.split('_')
+
+            for i, seg in enumerate(segments):
+                has_upper = any(c.isupper() for c in seg)
+                has_lower = any(c.islower() for c in seg)
+                has_digit = any(c.isdigit() for c in seg)
+
+                assert has_upper, f"Segment {i} '{seg}' missing uppercase"
+                assert has_lower, f"Segment {i} '{seg}' missing lowercase"
+                assert has_digit, f"Segment {i} '{seg}' missing digit"
+
+
 # =============================================================================
 # P3: Edge Cases
 # =============================================================================

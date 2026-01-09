@@ -84,6 +84,36 @@ Most websites require passwords with:
 
 The default format satisfies all of these.
 
+## Entropy & Security
+
+### How much entropy do we have?
+
+| Mode | Calculation | Entropy |
+|------|-------------|---------|
+| **Default** | (26 × 26 × 10 × 62 × 24)^4 segments | **~93 bits** |
+| **Simple** | 31^16 chars (unambiguous charset) | **~79 bits** |
+| **Paranoid** | Same as default | **~93 bits** |
+
+### How much do you need?
+
+| Bits | Protection Level |
+|------|------------------|
+| 64 | Online attacks with rate limiting |
+| 80 | Offline attacks, commodity hardware |
+| **80-100** | **Recommended for password managers** |
+| 128 | Nation-state attackers (overkill for passwords) |
+
+### Comparison
+
+| Generator | Default Entropy |
+|-----------|-----------------|
+| **genpassword** | **~93 bits** |
+| Bitwarden (14 chars) | ~90 bits |
+| 1Password (20 chars) | ~130 bits |
+| Random 16 alphanumeric | ~95 bits |
+
+Our ~93 bits is solid. You'd need mass-scale computing (or waiting until the heat death of the universe) to brute-force it.
+
 ## Modes
 
 ### Default: Readable Strong
