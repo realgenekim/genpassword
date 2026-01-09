@@ -165,6 +165,8 @@ make install
 python genpassword.py
 ```
 
+**Note:** Auto-copy to clipboard tested on macOS. Linux/Windows support included but untested.
+
 ## Why Not Just Use...
 
 **1Password / LastPass / Bitwarden / etc.?**
