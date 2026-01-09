@@ -101,12 +101,11 @@ The default format satisfies all of these.
 | 64 | ~585 years | Online attacks (with rate limiting) |
 | 80 | ~38 million years | Offline attacks, commodity hardware |
 | **93** | **~315 billion years** | **Our default** |
-| 112 | ~1.6 × 10^17 years | NIST minimum for cryptographic keys |
 | 128 | ~1 × 10^22 years | Quantum-resistant |
 
 *Note: Age of universe ≈ 1.4 × 10^10 years*
 
-[NIST SP 800-63B](https://pages.nist.gov/800-63-3/sp800-63b.html) requires rate-limiting below 64 bits, and specifies 112 bits minimum for cryptographic operations.
+[NIST SP 800-63B](https://pages.nist.gov/800-63-3/sp800-63b.html) specifies 64 bits as the threshold below which rate-limiting is required for passwords. The 112-bit minimum you may have heard about is for *cryptographic keys* (AES, TLS sessions), not passwords—keys face offline attacks at hardware speed with no rate limiting. Passwords are protected by hashing and rate limiting, so 64+ bits is plenty. Our 93 bits is 22× the age of the universe.
 
 ### Comparison
 
