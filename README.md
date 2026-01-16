@@ -169,9 +169,17 @@ hn4k_xp2m_b7qf_9dtc
 $ genpassword --paranoid
 Kp4x.Tm9n-Bc2w!Qf7v
 
-# Custom length
-$ genpassword -l 24
-Kp4x_Tm9n_Bc2w_Qf7v_Hn3m
+# Longer passwords - more segments
+$ genpassword --segments 5
+pF3M_im4B_HqY4_19Rk_0LaF
+
+# Longer passwords - longer segments
+$ genpassword --segment-length 5
+Bu9Vo_75DDc_nGNx4_qcW4H
+
+# Custom exact length
+$ genpassword -l 30
+y5tY_vO2c_56Wu_wUR9_Xw82_Nj3u
 
 # Show all profiles
 $ genpassword --list
@@ -184,6 +192,185 @@ $ genpassword --list
 | **Default** | Most situations. Passwords you'll copy-paste. |
 | **Simple** | Dictating over phone. Typing on mobile. Teaching non-tech users. |
 | **Paranoid** | Sites that reject underscore as "not a symbol". Maximum entropy. |
+
+## Longer Passwords: Strategies & Use Cases
+
+The default 19-character password (~93 bits) is already excellent for most uses, but you might want longer passwords for:
+- High-value accounts (banking, email, password managers)
+- Compliance requirements (some industries mandate minimum entropy)
+- Peace of mind ("future-proofing" against quantum computing)
+- Systems with unusually long maximum password lengths
+
+### Strategy 1: Add More Segments (Recommended)
+
+**Best for: Maximum readability and visual rhythm**
+
+```bash
+# 5 segments = 24 chars, ~116 bits
+$ genpassword --segments 5
+pF3M_im4B_HqY4_19Rk_0LaF
+
+# 6 segments = 29 chars, ~139 bits
+$ genpassword --segments 6
+Kp4x_Tm9n_Bc2w_Qf7v_Hn3m_Xt8y
+
+# 8 segments = 39 chars, ~186 bits (overkill for most)
+$ genpassword --segments 8
+```
+
+**Why this works:**
+- Maintains 4-character chunks (easiest to read)
+- Natural visual rhythm
+- Easy to verify ("did I type that correctly?")
+- Scales linearly: +5 chars = +23 bits entropy
+
+**Use cases:**
+- Password manager master password
+- Root/administrator accounts
+- Encryption passphrases
+- Long-lived credentials
+
+### Strategy 2: Longer Segments
+
+**Best for: Maximum entropy per character**
+
+```bash
+# 4 segments × 5 chars = 23 chars, ~126 bits
+$ genpassword --segment-length 5
+Bu9Vo_75DDc_nGNx4_qcW4H
+
+# 4 segments × 6 chars = 27 chars, ~160 bits
+$ genpassword --segment-length 6
+Kp4xYm_Tm9nBc_2wQf7v_Hn3mXt
+```
+
+**Why this works:**
+- More entropy-efficient (5.48 bits/char vs 4.85)
+- Slightly shorter overall for same security
+- Still relatively readable
+
+**Trade-off:**
+- 5-6 character chunks harder to scan than 4-character
+- Requires more concentration to verify
+
+### Strategy 3: Use Length Flag for Specific Requirements
+
+**Best for: Meeting exact character requirements**
+
+```bash
+# "I need exactly 30 characters"
+$ genpassword -l 30
+y5tY_vO2c_56Wu_wUR9_Xw82_Nj3u
+
+# "I need at least 40 characters"
+$ genpassword -l 40
+```
+
+**Note:** The `-l` flag calculates segments automatically, maintaining 4-char segments where possible.
+
+### Recommended Presets by Use Case
+
+| Use Case | Command | Length | Entropy | Notes |
+|----------|---------|--------|---------|-------|
+| **Standard** (default) | `genpassword` | 19 chars | ~93 bits | Excellent for 99% of cases |
+| **High-value accounts** | `genpassword --segments 5` | 24 chars | ~116 bits | Email, banking, password manager |
+| **Maximum security** | `genpassword --segments 6` | 29 chars | ~139 bits | Root access, encryption keys |
+| **Compliance (100+ bits)** | `genpassword --segment-length 5` | 23 chars | ~126 bits | Meets SOC2/ISO27001 guidelines |
+| **Future-proof** | `genpassword --segments 8` | 39 chars | ~186 bits | Quantum-resistant overkill |
+
+### Password Manager Integration
+
+**Master Password Strategy:**
+
+For your password manager's master password, use a longer, memorable approach:
+
+```bash
+# Option 1: More segments for high entropy
+$ genpassword --segments 6
+Kp4x_Tm9n_Bc2w_Qf7v_Hn3m_Xt8y   # 139 bits
+
+# Option 2: Simple mode for easier manual typing
+$ genpassword --simple --segments 5
+hn4k_xp2m_b7qf_9dtc_t7wr   # ~99 bits, no shift key
+
+# Option 3: Custom length for specific requirement
+$ genpassword -l 32
+```
+
+**Tips for password managers:**
+1. **Master password:** Use 5-6 segments (116-139 bits). You'll type this frequently, so balance security with usability.
+2. **Generated passwords:** Use default (93 bits) for most accounts. The password manager handles the complexity.
+3. **High-value accounts:** Use 5 segments even within your password manager for critical accounts.
+4. **Recovery codes:** Generate multiple with `-n 5` and store separately.
+
+### Combining Strategies: Creative Approaches
+
+**1. Passphrase + Structure**
+
+Use genpassword segments as "word substitutes":
+```bash
+$ genpassword --segments 4 --no-copy
+Kp4x_Tm9n_Bc2w_Qf7v
+
+# Mentally map: "Kp4x is my cat, Tm9n likes Bc2w, remember Qf7v"
+```
+
+**2. Layered Security**
+
+For different account tiers:
+```bash
+# Tier 1 (low value): Default
+$ genpassword
+
+# Tier 2 (important): 5 segments
+$ genpassword --segments 5
+
+# Tier 3 (critical): 6 segments
+$ genpassword --segments 6
+```
+
+**3. Simple Mode for Shared Access**
+
+When dictating to others or sharing temporarily:
+```bash
+$ genpassword --simple --segments 5
+hn4k_xp2m_b7qf_9dtc_x6wq   # No ambiguous chars, easier to communicate
+```
+
+### Security vs Usability Trade-offs
+
+| Factor | Default (4×4) | 5 Segments | 6 Segments | Longer Segments |
+|--------|---------------|------------|------------|-----------------|
+| **Entropy** | 93 bits ✓ | 116 bits ✓✓ | 139 bits ✓✓✓ | 126+ bits ✓✓ |
+| **Readability** | Excellent | Very Good | Good | Fair |
+| **Typing speed** | Fast | Medium | Slower | Medium |
+| **Copy-paste** | Easy | Easy | Easy | Easy |
+| **Mobile typing** | Good | Fair | Challenging | Fair |
+| **Memorability** | Low | Lower | Lowest | Low |
+
+**General guidance:**
+- **Below 64 bits:** Vulnerable to offline attacks (don't go here)
+- **64-80 bits:** Acceptable for low-value accounts with rate limiting
+- **80-100 bits:** Good for most accounts
+- **93 bits (our default):** Excellent for general use
+- **100-128 bits:** High-value accounts, compliance requirements
+- **128+ bits:** Future-proofing, quantum resistance, overkill
+
+### When NOT to Use Longer Passwords
+
+❌ **Don't use longer passwords when:**
+- The system has a low maximum length (some old systems cap at 16-20 chars)
+- You need to type it frequently on mobile devices
+- It's for a low-value account (newsletter signups, forums)
+- The system has aggressive rate limiting (length won't help against 3-tries-then-lockout)
+
+✅ **Do use longer passwords when:**
+- It's a password manager master password
+- It's for root/admin access
+- It's for encryption keys or certificates
+- Compliance requires 100+ bits of entropy
+- The account has high value (financial, email, identity)
+- It will be stored in a password manager (never typed)
 
 ## Installation
 

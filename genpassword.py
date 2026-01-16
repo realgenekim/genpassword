@@ -153,14 +153,20 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  genpassword              # Kp4x_Tm9n_Bc2w_Qf7v (default)
-  genpassword --simple     # hn4k_xp2m_b7qf_9dtc (easy to dictate)
-  genpassword --paranoid   # Kp4x.Tm9n-Bc2w^Qf7v (max symbols)
-  genpassword -n 5         # Generate 5 passwords
-  genpassword --no-copy    # Don't copy to clipboard
+  genpassword                 # Kp4x_Tm9n_Bc2w_Qf7v (default, ~93 bits)
+  genpassword --simple        # hn4k_xp2m_b7qf_9dtc (easy to dictate)
+  genpassword --paranoid      # Kp4x.Tm9n-Bc2w^Qf7v (max symbols)
+  genpassword -n 5            # Generate 5 passwords
+  genpassword --no-copy       # Don't copy to clipboard
+
+Longer passwords:
+  genpassword --segments 5         # 24 chars, ~116 bits (high-value accounts)
+  genpassword --segments 6         # 29 chars, ~139 bits (maximum security)
+  genpassword --segment-length 5   # 23 chars, ~126 bits (compliance)
+  genpassword -l 30                # Exactly 30 chars total
 
 Modes:
-  default   Mixed case + digits + underscore separators
+  default   Mixed case + digits + underscore separators (~93 bits)
             Double-click friendly, satisfies most site requirements
 
   simple    Lowercase + digits only, no ambiguous chars (0,O,l,1,I)
