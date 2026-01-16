@@ -442,6 +442,99 @@ class TestEdgeCases:
         assert pw.islower() or pw.isdigit() or pw.isalnum()
 
 
+class TestLongerPasswordStrategies:
+    """Test longer password strategies from README documentation."""
+
+    def test_strategy_1_more_segments(self):
+        """Strategy 1: Adding more segments for longer passwords"""
+        # 5 segments = 24 chars total (20 + 4 underscores)
+        pw5 = generate_default(segments=5)
+        segments5 = pw5.split('_')
+        assert len(segments5) == 5
+        assert len(pw5) == 24, f"5 segments should be 24 chars, got {len(pw5)}: '{pw5}'"
+
+        # 6 segments = 29 chars total (24 + 5 underscores)
+        pw6 = generate_default(segments=6)
+        segments6 = pw6.split('_')
+        assert len(segments6) == 6
+        assert len(pw6) == 29, f"6 segments should be 29 chars, got {len(pw6)}: '{pw6}'"
+
+        # 8 segments = 39 chars total (32 + 7 underscores)
+        pw8 = generate_default(segments=8)
+        segments8 = pw8.split('_')
+        assert len(segments8) == 8
+        assert len(pw8) == 39, f"8 segments should be 39 chars, got {len(pw8)}: '{pw8}'"
+
+    def test_strategy_2_longer_segments(self):
+        """Strategy 2: Longer segments for more entropy per character"""
+        # 4 segments × 5 chars = 23 chars total
+        pw5 = generate_default(segment_length=5)
+        segments5 = pw5.split('_')
+        assert len(segments5) == 4
+        assert all(len(s) == 5 for s in segments5)
+        assert len(pw5) == 23
+
+        # 4 segments × 6 chars = 27 chars total
+        pw6 = generate_default(segment_length=6)
+        segments6 = pw6.split('_')
+        assert len(segments6) == 4
+        assert all(len(s) == 6 for s in segments6)
+        assert len(pw6) == 27
+
+    def test_preset_high_value_accounts(self):
+        """Preset: High-value accounts (5 segments, ~116 bits)"""
+        for _ in range(100):
+            pw = generate_default(segments=5)
+            # Should maintain all safety properties
+            assert len(pw) == 24
+            assert pw.count('_') == 4
+            # Should have variety in each segment
+            segments = pw.split('_')
+            for seg in segments:
+                assert any(c.isupper() for c in seg)
+                assert any(c.islower() for c in seg)
+                assert any(c.isdigit() for c in seg)
+
+    def test_preset_maximum_security(self):
+        """Preset: Maximum security (6 segments, ~139 bits)"""
+        for _ in range(50):
+            pw = generate_default(segments=6)
+            assert len(pw) == 29
+            assert pw.count('_') == 5
+
+    def test_preset_compliance(self):
+        """Preset: Compliance 100+ bits (4×5, ~126 bits)"""
+        for _ in range(50):
+            pw = generate_default(segment_length=5)
+            assert len(pw) == 23
+            segments = pw.split('_')
+            assert all(len(s) == 5 for s in segments)
+
+    def test_simple_mode_longer_passwords(self):
+        """Simple mode works with longer password strategies"""
+        # 5 segments in simple mode
+        pw = generate_simple(segments=5)
+        assert len(pw) == 24
+        assert pw.count('_') == 4
+
+        # Longer segments in simple mode
+        pw2 = generate_simple(segment_length=5)
+        segments = pw2.split('_')
+        assert all(len(s) == 5 for s in segments)
+
+    def test_paranoid_mode_longer_passwords(self):
+        """Paranoid mode works with longer password strategies"""
+        # 5 segments in paranoid mode
+        pw = generate_paranoid(segments=5)
+        assert len(pw) == 24
+
+        # Longer segments in paranoid mode
+        pw2 = generate_paranoid(segment_length=5)
+        segments = pw2.split('.')  # Use first separator to estimate
+        # Paranoid uses rotating separators, so just verify it's roughly correct length
+        assert len(pw2) == 23
+
+
 # =============================================================================
 # CLI Tests (if running as script)
 # =============================================================================
