@@ -530,9 +530,12 @@ class TestLongerPasswordStrategies:
 
         # Longer segments in paranoid mode
         pw2 = generate_paranoid(segment_length=5)
-        segments = pw2.split('.')  # Use first separator to estimate
-        # Paranoid uses rotating separators, so just verify it's roughly correct length
+        # Paranoid uses rotating separators, so verify total length is correct
+        # 4 segments × 5 chars + 3 separators = 23 chars
         assert len(pw2) == 23
+        # Verify it has the expected pattern of alphanumeric chars and separators
+        alphanumeric_count = sum(1 for c in pw2 if c.isalnum())
+        assert alphanumeric_count == 20, f"Expected 20 alphanumeric chars, got {alphanumeric_count}"
 
 
 # =============================================================================

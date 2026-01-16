@@ -239,7 +239,7 @@ $ genpassword --segments 8
 $ genpassword --segment-length 5
 Bu9Vo_75DDc_nGNx4_qcW4H
 
-# 4 segments × 6 chars = 27 chars, ~157 bits
+# 4 segments × 6 chars = 27 chars, ~160 bits
 $ genpassword --segment-length 6
 Kp4xYm_Tm9nBc_2wQf7v_Hn3mXt
 ```
